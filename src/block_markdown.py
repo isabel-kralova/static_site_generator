@@ -39,7 +39,7 @@ def block_to_block_type(block):
     # QUOTE
     is_quote = True
     for line in lines:
-        if not line.startswith("> "):
+        if not line.startswith(">"):
             is_quote = False
             break
     if is_quote:
@@ -134,7 +134,9 @@ def markdown_to_html_node(markdown):
             lines = block.split("\n")
             parts = []
             for line in lines:
-                clean_line = line.lstrip("> ").strip()
+                if not line.startswith(">"):
+                    raise ValueError("Invalid quote block")
+                clean_line = line.lstrip(">").strip()
                 parts.append(clean_line)
             cleaned = " ".join(parts)
             node = ParentNode(
@@ -165,3 +167,11 @@ def markdown_to_html_node(markdown):
         children.append(node)
     
     return ParentNode(tag="div", children=children)
+
+def extract_title(markdown):
+    lines = markdown.split("\n")
+    for line in lines:
+        line = line.strip()
+        if line.startswith("# "):
+            return line [2:].strip()
+    raise Exception("No h1 header found in markdown")

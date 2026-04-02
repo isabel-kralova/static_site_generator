@@ -1,6 +1,6 @@
 import unittest
 from htmlnode import HTMLNode, ParentNode, LeafNode
-from block_markdown import markdown_to_blocks, block_to_block_type, BlockType, markdown_to_html_node
+from block_markdown import markdown_to_blocks, block_to_block_type, BlockType, markdown_to_html_node, extract_title
 
 class TestBlockMarkdown(unittest.TestCase):
     def test_markdown_to_blocks(self):
@@ -137,6 +137,24 @@ the **same** even with inline stuff
             html,
             "<div><h1>Heading 1</h1><h2>Heading 2</h2><h3>Heading 3</h3></div>",
         )
+
+class TestExtractTitle(unittest.TestCase):
+    def test_simple_h1(self):
+        self.assertEqual(
+            extract_title("# Hello"),
+            "Hello"
+        )
+    
+    def test_two_headings(self):
+        self.assertEqual(
+            extract_title("     # Hello World        "),
+            "Hello World"
+    )
+
+    def test_ignores_h2(self):
+        md = "## Not the title"
+        with self.assertRaises(Exception):
+            extract_title(md)
 
 
 if __name__ == "__main__":
