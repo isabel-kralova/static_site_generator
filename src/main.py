@@ -1,16 +1,14 @@
-from copystatic import copy_directory, generate_page
+from copystatic import copy_directory, generate_pages_recursive
 
 def main():
-    src = "static"
-    dest = "public"
-
-    from_path = "content/index.md"
+    content_dir = "content"
+    static_dir = "static"
+    public_dir = "public"
     template_path = "template.html"
-    dest_path = "public/index.html"
 
-    copy_directory(src, dest)
+    copy_directory(static_dir, public_dir)
 
-    generate_page(from_path, template_path, dest_path)
+    generate_pages_recursive(content_dir, template_path, public_dir)
 
 
 if __name__ == "__main__":
