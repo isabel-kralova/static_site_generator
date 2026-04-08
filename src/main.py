@@ -19,3 +19,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# https://isabel-kralova.github.io/static_site_generator/
