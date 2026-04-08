@@ -39,7 +39,11 @@ def generate_page(from_path, template_path, dest_path, basepath):
     html_content = html_node.to_html()
     title = extract_title(markdown_content)
 
-    clean_basepath = basepath.rstrip("/") + "/"
+    if basepath == "/":
+        clean_basepath = "/"
+    else:
+        clean_basepath = "/" + basepath.strip("/") + "/"
+    
     
     full_html = template_content.replace("{{ Title }}", title)
     full_html = full_html.replace("{{ Content }}", html_content)
