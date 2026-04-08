@@ -27,7 +27,7 @@ def copy_recursive(src, dest):
             os.mkdir(dest_path)
             copy_recursive(src_path, dest_path)
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, basepath):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     
     with open(from_path, "r") as f:
@@ -41,6 +41,8 @@ def generate_page(from_path, template_path, dest_path):
     
     full_html = template_content.replace("{{ Title }}", title)
     full_html = full_html.replace("{{ Content }}", html_content)
+    full_html = full_html.replace('href="/', f'href="{basepath}')
+    full_html = full_html.replace('src="/', f'src="{basepath}')
 
     dest_dir = os.path.dirname(dest_path)
     if dest_dir:
@@ -50,7 +52,7 @@ def generate_page(from_path, template_path, dest_path):
         f.write(full_html)
 
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
     if not os.path.exists(dest_dir_path):
         os.makedirs(dest_dir_path)
 
@@ -63,7 +65,7 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
             dest_file_path = destination_path.replace(".md", ".html")
 
             print(f"Generating page: {item_path} -> {dest_file_path}")
-            generate_page(item_path, template_path, dest_file_path)
+            generate_page(item_path, template_path, dest_file_path, basepath)
         
         elif os.path.isdir(item_path):
-            generate_pages_recursive(item_path, template_path, destination_path)
+            generate_pages_recursive(item_path, template_path, destination_path, basepath)
